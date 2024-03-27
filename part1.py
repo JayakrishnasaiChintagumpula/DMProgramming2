@@ -39,7 +39,7 @@ def compute():
     """
     A.	Load the following 5 datasets with 100 samples each: noisy_circles (nc), noisy_moons (nm), blobs with varied variances (bvv), Anisotropicly distributed data (add), blobs (b). Use the parameters from (https://scikit-learn.org/stable/auto_examples/cluster/plot_cluster_comparison.html), with any random state. (with random_state = 42). Not setting the correct random_state will prevent me from checking your results.
     """
-    dct = answers["1A: datasets"] = datasets
+    dct = answers["1A: datasets"] = {}
     random_state=42;
     datasets={}
 
@@ -84,10 +84,6 @@ def compute():
 
     return predicted_labels
     answers['1B: fit_kmeans'] = fit_kmeans
-
-    
-    
-        
 
 
     """
