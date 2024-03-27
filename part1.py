@@ -129,8 +129,8 @@ def compute():
 
     cluster_successes, cluster_failures = create_cluster_plots(answers["1A: datasets"], answers["1B: fit_kmeans"])
 
-    answers["1C: cluster successes"] = cluster_successes
-    answers["1C: cluster failures"] = cluster_failures
+    dct= answers["1C: cluster successes"] = cluster_successes
+    dct = answers["1C: cluster failures"] = cluster_failures
     
     print(cluster_successes)
     print(cluster_failures)
@@ -144,7 +144,6 @@ def compute():
     # dct value: list of dataset abbreviations
     # Look at your plots, and return your answers.
     # The plot is part of your report, a pdf file name "report.pdf", in your repository.
-    dct = answers["1D: datasets sensitive to initialization"] = [""]
     def analyze_initialization_sensitivity(datasets, fit_kmeans, num_iterations=5):
 
         k_values = [2, 3]
@@ -174,7 +173,7 @@ def compute():
 
     sensitive_datasets = analyze_initialization_sensitivity(answers["1A: datasets"], answers["1B: fit_kmeans"])
 
-    answers["1D: datasets sensitive to initialization"] = sensitive_datasets
+    dct = answers["1D: datasets sensitive to initialization"] = sensitive_datasets
 
     return answers
 
