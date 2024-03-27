@@ -39,7 +39,6 @@ def compute():
     """
     A.	Load the following 5 datasets with 100 samples each: noisy_circles (nc), noisy_moons (nm), blobs with varied variances (bvv), Anisotropicly distributed data (add), blobs (b). Use the parameters from (https://scikit-learn.org/stable/auto_examples/cluster/plot_cluster_comparison.html), with any random state. (with random_state = 42). Not setting the correct random_state will prevent me from checking your results.
     """
-    dct = answers["1A: datasets"] = {}
     random_state=42;
     datasets={}
 
@@ -63,9 +62,7 @@ def compute():
 
     
     # 'nc', 'nm', 'bvv', 'add', 'b'. keys: 'nc', 'nm', 'bvv', 'add', 'b' (abbreviated datasets)
-    answers["1A: datasets"] = datasets
-    answers = compute()
-    return answers
+    dct = answers["1A: datasets"] = {'nc': nc, 'nm': nm, 'bvv': bvv, 'add': add,'b': b}
 
     """
    B. Write a function called fit_kmeans that takes dataset (before any processing on it), i.e., pair of (data, label) Numpy arrays, and the number of clusters as arguments, and returns the predicted labels from k-means clustering. Use the init='random' argument and make sure to standardize the data (see StandardScaler transform), prior to fitting the KMeans estimator. This is the function you will use in the following questions. 
@@ -82,8 +79,7 @@ def compute():
 
     predicted_labels = kmeans.labels_
 
-    return predicted_labels
-    answers['1B: fit_kmeans'] = fit_kmeans
+    dct = answers["1B: fit_kmeans"] = fit_kmeans
 
 
     """
