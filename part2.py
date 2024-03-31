@@ -62,8 +62,8 @@ def compute():
 
     # dct: return value from the make_blobs function in sklearn, expressed as a list of three numpy arrays
     np.random.seed(12)
-    Array1, Array2, Array3  = make_blobs(n_samples=20, centers=5, center_box=(-20, 20), random_state=12)
-    dct = answers["2A: blob"] = [Array1, Array2, Array3]
+    X, Y, Z  = make_blobs(n_samples=20, centers=5, center_box=(-20, 20), random_state=12)
+    dct = answers["2A: blob"] = [X,Y,Z]
 
     """
     B. Modify the fit_kmeans function to return the SSE (see Equations 8.1 and 8.2 in the book).
@@ -80,12 +80,12 @@ def compute():
     # Each tuple is a (k, SSE) pair
     sse_values = []
     for k in range(1, 9):
-        sse = fit_kmeans((Array1,None), k)
-        sse_values.append([k, sse])
+        sse = fit_kmeans((X,None), k)
+        sse_values.append((k, sse))
     sse_values = [[k ,sse] for k,sse in sse_values]
     #Plotting
     plt.figure(figsize=(8, 6))
-    plt.plot(k_values, metric_values, '-o')
+    plt.plot(k_values, sse_values, '-o')
     plt.title('SSE as function of k)
     plt.xlabel('Number of clusters k')
     plt.ylabel('Value of metric')
@@ -102,7 +102,7 @@ def compute():
     inertia_values = []
     for k in range(1,9):
         kmeans = KMeans(n_clusters=k, random_state= 0, init= "random")
-        kmeans.fir(Array1)
+        kmeans.fit(X)
         
         inertia= kmeans.inertia_
         inertia_values.append((k,inertia))
