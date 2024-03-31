@@ -37,8 +37,6 @@ In this task you will explore different methods to find a good value for k
 # the question asked. 
 
 def fit_kmeans(data, n_clusters):
-    data,labels = dataset
-    
     scaler = StandardScaler()
     standardized_data = scaler.fit_transform(data)
     
@@ -47,10 +45,12 @@ def fit_kmeans(data, n_clusters):
 
     predicted_labels = kmeans.labels_
 
-    centroids =  kmeans.cluster_centers_
+    centroids = kmeans.cluster_centers_
     distance = np.linalg.norm(standardized_data - centroids[predicted_labels], axis=1)
     sse = np.sum(distance**2)
     return sse
+
+
 
 def compute():
     # ---------------------
@@ -62,8 +62,8 @@ def compute():
 
     # dct: return value from the make_blobs function in sklearn, expressed as a list of three numpy arrays
     np.random.seed(12)
-    array_1, array_2, center  = make_blobs(n_samples=20, centers=5, center_box=(-20, 20), random_state=12)
-    dct = answers["2A: blob"] = [array_1,array_2,center]
+    data, labels = make_blobs(n_samples=20, centers=5, center_box=(-20, 20), random_state=12)
+    dct = answers["2A: blob"] = [data,labels]
 
     """
     B. Modify the fit_kmeans function to return the SSE (see Equations 8.1 and 8.2 in the book).
@@ -80,18 +80,17 @@ def compute():
     # Each tuple is a (k, SSE) pair
     sse_values = []
     for k in range(1, 9):
-        sse = fit_kmeans((array_1,None), k)
-        sse_values.append((k, sse))
-    sse_values = [[k ,sse] for k,sse in sse_values]
-    #Plotting
+        sse = fit_kmeans(data, k)
+        sse_values.append([k, sse])
+    
+    # Plotting the SSE values
     plt.figure(figsize=(8, 6))
-    plt.plot(k_values, sse_values, '-o')
-    plt.title('SSE as function of k)
+    plt.plot([k for k, _ in sse_values], [sse for _, sse in sse_values], '-o')
+    plt.title('SSE as function of k')
     plt.xlabel('Number of clusters k')
-    plt.ylabel('Value of metric')
+    plt.ylabel('SSE')
     plt.grid(True)
     plt.show()
-
     dct = answers["2C: SSE plot"] = sse_values
 
     """
@@ -100,22 +99,20 @@ def compute():
 
     # dct value has the same structure as in 2C
     inertia_values = []
-    for k in range(1,9):
-        kmeans = KMeans(n_clusters=k, random_state= 0, init= "random")
-        kmeans.fit(X)
-        
-        inertia= kmeans.inertia_
-        inertia_values.append((k,inertia))
-    inertia_values = [[k, inertia] for k,inertia in inertia_values]
-
+    for k in range(1, 9):
+        kmeans = KMeans(n_clusters=k, random_state=0, init="random")
+        kmeans.fit(data)
+        inertia = kmeans.inertia_
+        inertia_values.append([k, inertia])
+    
+    # Plotting the inertia values
     plt.figure(figsize=(8, 6))
-    plt.plot(k_values, inertia_values, '-o')
+    plt.plot([k for k, _ in inertia_values], [inertia for _, inertia in inertia_values], '-o')
     plt.title('Inertia as function of k')
     plt.xlabel('Number of clusters k')
-    plt.ylabel('Value of metric')
+    plt.ylabel('Inertia')
     plt.grid(True)
     plt.show()
-        
     dct = answers["2D: inertia plot"] = inertia_values
 
     # dct value should be a string, e.g., "yes" or "no"
