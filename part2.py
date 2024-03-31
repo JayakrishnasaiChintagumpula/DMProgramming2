@@ -62,7 +62,7 @@ def compute():
 
     # dct: return value from the make_blobs function in sklearn, expressed as a list of three numpy arrays
     np.random.seed(12)
-    X, Y, Z  = make_blobs(n_samples=20, centers=5, center_box=(-20, 20), random_state=12)
+    X, y, center  = make_blobs(n_samples=20, centers=5, center_box=(-20, 20), random_state=12)
     dct = answers["2A: blob"] = [X,Y,Z]
 
     """
@@ -92,7 +92,7 @@ def compute():
     plt.grid(True)
     plt.show()
 
-    dct = answers["2C: SSE plot"] = [sse_values]
+    dct = answers["2C: SSE plot"] = sse_values
 
     """
     D.	Repeat part 2.C for inertia (note this is an attribute in the kmeans estimator called _inertia). Do the optimal k’s agree?
@@ -116,7 +116,7 @@ def compute():
     plt.grid(True)
     plt.show()
         
-    dct = answers["2D: inertia plot"] = [inertia_values]
+    dct = answers["2D: inertia plot"] = inertia_values
 
     # dct value should be a string, e.g., "yes" or "no"
     dct = answers["2D: do ks agree?"] = "yes"
