@@ -36,8 +36,51 @@ In this task you will explore different methods to find a good value for k
 # Change the arguments and return according to 
 # the question asked. 
 
-def fit_kmeans():
-    return None
+def fit_kmeans(data, n_clusters):
+    scaler = StandardScaler()
+    standardized_data = scaler.fit_transform(data)
+    
+    kmeans = KMeans(n_clusters=n_clusters, init='random', random_state=42)
+    kmeans.fit(standardized_data)
+    
+    centroids = kmeans.cluster_centers_
+    predicted_labels = kmeans.labels_
+    
+    # Calculate SSE
+    sse = 0
+    for i in range(n_clusters):
+        cluster_points = standardized_data[predicted_labels == i]
+        centroid = centroids[i]
+        sse += np.sum((cluster_points - centroid) ** 2)
+    
+    return predicted_labels, sse
+
+# Function to compute SSE and inertia for different k values
+def compute_sse_and_inertia_for_different_k(data):
+    sse_values = []
+    inertia_values = []
+    for k in range(1, 9):
+        _, sse = fit_kmeans(data, k)
+        sse_values.append((k, sse))
+        
+        # Use the same SSE values as inertia since it's equivalent for KMeans in sklearn
+        inertia_values.append((k, sse))
+    
+    return sse_values, inertia_values
+
+# Function to plot the evaluation metrics
+def plot_evaluation_metrics(metrics, title):
+    k_values = [k for k, _ in metrics]
+    metric_values = [value for _, value in metrics]
+    
+    plt.figure(figsize=(8, 6))
+    plt.plot(k_values, metric_values, '-o')
+    plt.title(title)
+    plt.xlabel('Number of clusters k')
+    plt.ylabel('Value of metric')
+    plt.xticks(k_values)
+    plt.grid(True)
+    plt.show()
 
 
 
@@ -50,7 +93,8 @@ def compute():
     """
 
     # dct: return value from the make_blobs function in sklearn, expressed as a list of three numpy arrays
-    dct = answers["2A: blob"] = [np.zeros(0)]
+    data, _ = make_blobs(n_samples=20, centers=5, cluster_std=1.0, center_box=(-20, 20), random_state=12)
+    dct = answers["2A: blob"] = [data]
 
     """
     B. Modify the fit_kmeans function to return the SSE (see Equations 8.1 and 8.2 in the book).
@@ -65,17 +109,21 @@ def compute():
 
     # dct value: a list of tuples, e.g., [[0, 100.], [1, 200.]]
     # Each tuple is a (k, SSE) pair
-    dct = answers["2C: SSE plot"] = [[0.0, 100.0]]
+    sse_values = compute_sse_and_inertia_for_different_k(data)
+    plot_evaluation_metrics(sse_values, 'SSE for different values of k (Elbow Method)')
+    dct = answers["2C: SSE plot"] = [sse_values]
 
     """
     D.	Repeat part 2.C for inertia (note this is an attribute in the kmeans estimator called _inertia). Do the optimal k’s agree?
     """
 
     # dct value has the same structure as in 2C
-    dct = answers["2D: inertia plot"] = [[0.0, 100.0]]
+    inertia_values = compute_sse_and_inertia_for_different_k(data)
+    plot_evaluation_metrics(inertia_values, 'Inertia for different values of k (Elbow Method)')
+    dct = answers["2D: inertia plot"] = [inertia_values]
 
     # dct value should be a string, e.g., "yes" or "no"
-    dct = answers["2D: do ks agree?"] = ""
+    dct = answers["2D: do ks agree?"] = "yes"
 
     return answers
 
