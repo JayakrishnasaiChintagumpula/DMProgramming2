@@ -47,8 +47,8 @@ def fit_kmeans(data, n_clusters):
 
     predicted_labels = kmeans.labels_
 
-    centroid =  kmeans.cluster_centers_
-    distance = np.linalg.norm(standardized_data - centroid[predicted_labels], axis=1)
+    centroids =  kmeans.cluster_centers_
+    distance = np.linalg.norm(standardized_data - centroids[predicted_labels], axis=1)
     sse = np.sum(distance**2)
     return sse
 
