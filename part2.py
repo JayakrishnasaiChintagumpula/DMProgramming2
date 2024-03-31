@@ -43,35 +43,24 @@ def fit_kmeans(data, n_clusters):
     kmeans = KMeans(n_clusters=n_clusters, init='random', random_state=42)
     kmeans.fit(standardized_data)
     
-    centroids = kmeans.cluster_centers_
-    predicted_labels = kmeans.labels_
-    
-    # Calculate SSE
-    sse = 0
-    for i in range(n_clusters):
-        cluster_points = standardized_data[predicted_labels == i]
-        centroid = centroids[i]
-        sse += np.sum((cluster_points - centroid) ** 2)
-    
-    return predicted_labels, sse
+    # Use the inertia attribute to get the SSE
+    sse = kmeans.inertia_
+    return kmeans.labels_, sse
 
-# Function to compute SSE and inertia for different k values
+# Function to compute SSE for different k values
 def compute_sse_and_inertia_for_different_k(data):
     sse_values = []
     inertia_values = []
     for k in range(1, 9):
         _, sse = fit_kmeans(data, k)
-        sse_values.append((k, sse))
-        
-        # Use the same SSE values as inertia since it's equivalent for KMeans in sklearn
-        inertia_values.append((k, sse))
-    
+        sse_values.append([k, sse])
+        inertia_values.append([k, sse])  # Inertia is equivalent to the manually calculated SSE
     return sse_values, inertia_values
 
-# Function to plot the evaluation metrics
+# Function to plot the evaluation metrics (adapted for a list of lists)
 def plot_evaluation_metrics(metrics, title):
-    k_values = [k for k, _ in metrics]
-    metric_values = [value for _, value in metrics]
+    k_values = [entry[0] for entry in metrics]
+    metric_values = [entry[1] for entry in metrics]
     
     plt.figure(figsize=(8, 6))
     plt.plot(k_values, metric_values, '-o')
@@ -81,7 +70,6 @@ def plot_evaluation_metrics(metrics, title):
     plt.xticks(k_values)
     plt.grid(True)
     plt.show()
-
 
 
 def compute():
