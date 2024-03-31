@@ -37,40 +37,20 @@ In this task you will explore different methods to find a good value for k
 # the question asked. 
 
 def fit_kmeans(data, n_clusters):
+    data,labels = dataset
+    
     scaler = StandardScaler()
     standardized_data = scaler.fit_transform(data)
     
-    kmeans = KMeans(n_clusters=n_clusters, init='random', random_state=42)
+    kmeans = KMeans(n_clusters=n_clusters, init='random', random_state=0)
     kmeans.fit(standardized_data)
-    
-    # Use the inertia attribute to get the SSE
-    sse = kmeans.inertia_
-    return kmeans.labels_, sse
 
-# Function to compute SSE for different k values
-def compute_sse_and_inertia_for_different_k(data):
-    sse_values = []
-    inertia_values = []
-    for k in range(1, 9):
-        _, sse = fit_kmeans(data, k)
-        sse_values.append([k, sse])
-        inertia_values.append([k, sse])  # Inertia is equivalent to the manually calculated SSE
-    return sse_values, inertia_values
+    predicted_labels = kmeans.labels_
 
-# Function to plot the evaluation metrics (adapted for a list of lists)
-def plot_evaluation_metrics(metrics, title):
-    k_values = [entry[0] for entry in metrics]
-    metric_values = [entry[1] for entry in metrics]
-    
-    plt.figure(figsize=(8, 6))
-    plt.plot(k_values, metric_values, '-o')
-    plt.title(title)
-    plt.xlabel('Number of clusters k')
-    plt.ylabel('Value of metric')
-    plt.xticks(k_values)
-    plt.grid(True)
-    plt.show()
-
+    centroid =  kmeans.cluster_centers_
+    distance = np.linalg.norm(standardized_data - centroid[predicted_labels], axis=1)
+    sse = np.sum(distance**2)
+    return sse
 
 def compute():
     # ---------------------
@@ -81,8 +61,9 @@ def compute():
     """
 
     # dct: return value from the make_blobs function in sklearn, expressed as a list of three numpy arrays
-    data, _ = make_blobs(n_samples=20, centers=5, cluster_std=1.0, center_box=(-20, 20), random_state=12)
-    dct = answers["2A: blob"] = [data]
+    np.random.seed(12)
+    Array1, Array2, Array3  = make_blobs(n_samples=20, centers=5, center_box=(-20, 20), random_state=12)
+    dct = answers["2A: blob"] = [Array1, Array2, Array3]
 
     """
     B. Modify the fit_kmeans function to return the SSE (see Equations 8.1 and 8.2 in the book).
@@ -97,8 +78,20 @@ def compute():
 
     # dct value: a list of tuples, e.g., [[0, 100.], [1, 200.]]
     # Each tuple is a (k, SSE) pair
-    sse_values, inertia_values = compute_sse_and_inertia_for_different_k(data)
-    plot_evaluation_metrics(sse_values, 'SSE for different values of k (Elbow Method)')
+    sse_values = []
+    for k in range(1, 9):
+        sse = fit_kmeans((Array1,None), k)
+        sse_values.append([k, sse])
+    sse_values = [[k ,sse] for k,sse in sse_values]
+    #Plotting
+    plt.figure(figsize=(8, 6))
+    plt.plot(k_values, metric_values, '-o')
+    plt.title('SSE as function of k)
+    plt.xlabel('Number of clusters k')
+    plt.ylabel('Value of metric')
+    plt.grid(True)
+    plt.show()
+
     dct = answers["2C: SSE plot"] = [sse_values]
 
     """
@@ -106,8 +99,23 @@ def compute():
     """
 
     # dct value has the same structure as in 2C
-    sse_values, inertia_values = compute_sse_and_inertia_for_different_k(data)
-    plot_evaluation_metrics(inertia_values, 'Inertia for different values of k (Elbow Method)')
+    inertia_values = []
+    for k in range(1,9):
+        kmeans = KMeans(n_clusters=k, random_state= 0, init= "random")
+        kmeans.fir(Array1)
+        
+        inertia= kmeans.inertia_
+        inertia_values.append((k,inertia))
+    inertia_values = [[k, inertia] for k,inertia in inertia_values]
+
+    plt.figure(figsize=(8, 6))
+    plt.plot(k_values, inertia_values, '-o')
+    plt.title('Inertia as function of k)
+    plt.xlabel('Number of clusters k')
+    plt.ylabel('Value of metric')
+    plt.grid(True)
+    plt.show()
+        
     dct = answers["2D: inertia plot"] = [inertia_values]
 
     # dct value should be a string, e.g., "yes" or "no"
