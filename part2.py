@@ -109,7 +109,7 @@ def compute():
 
     # dct value: a list of tuples, e.g., [[0, 100.], [1, 200.]]
     # Each tuple is a (k, SSE) pair
-    sse_values = compute_sse_and_inertia_for_different_k(data)
+    sse_values, inertia_values = compute_sse_and_inertia_for_different_k(data)
     plot_evaluation_metrics(sse_values, 'SSE for different values of k (Elbow Method)')
     dct = answers["2C: SSE plot"] = [sse_values]
 
@@ -118,7 +118,7 @@ def compute():
     """
 
     # dct value has the same structure as in 2C
-    inertia_values = compute_sse_and_inertia_for_different_k(data)
+    sse_values, inertia_values = compute_sse_and_inertia_for_different_k(data)
     plot_evaluation_metrics(inertia_values, 'Inertia for different values of k (Elbow Method)')
     dct = answers["2D: inertia plot"] = [inertia_values]
 
