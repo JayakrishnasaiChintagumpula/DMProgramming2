@@ -110,7 +110,7 @@ def compute():
 
     plt.figure(figsize=(8, 6))
     plt.plot(k_values, inertia_values, '-o')
-    plt.title('Inertia as function of k)
+    plt.title('Inertia as function of k')
     plt.xlabel('Number of clusters k')
     plt.ylabel('Value of metric')
     plt.grid(True)
