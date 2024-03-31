@@ -62,8 +62,8 @@ def compute():
 
     # dct: return value from the make_blobs function in sklearn, expressed as a list of three numpy arrays
     np.random.seed(12)
-    X, y, center  = make_blobs(n_samples=20, centers=5, center_box=(-20, 20), random_state=12)
-    dct = answers["2A: blob"] = [X,Y,Z]
+    array_1, array_2, center  = make_blobs(n_samples=20, centers=5, center_box=(-20, 20), random_state=12)
+    dct = answers["2A: blob"] = [array_1,array_2,center]
 
     """
     B. Modify the fit_kmeans function to return the SSE (see Equations 8.1 and 8.2 in the book).
@@ -80,7 +80,7 @@ def compute():
     # Each tuple is a (k, SSE) pair
     sse_values = []
     for k in range(1, 9):
-        sse = fit_kmeans((X,None), k)
+        sse = fit_kmeans((array_1,None), k)
         sse_values.append((k, sse))
     sse_values = [[k ,sse] for k,sse in sse_values]
     #Plotting
