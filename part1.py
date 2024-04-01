@@ -93,7 +93,6 @@ def compute():
 
     # dct value: return a list of 0 or more dataset abbreviations (list has zero or more elements, 
     # which are abbreviated dataset names as strings)
-    dct = answers["1C: cluster failures"] = ["xy"]
     def create_cluster_plots(datasets, fit_kmeans):
         k_values = [2, 3, 5, 10]
         fig, axs = plt.subplots(len(k_values), len(datasets), figsize=(20, 15))
