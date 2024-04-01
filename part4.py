@@ -126,9 +126,6 @@ def compute():
 
     plt.tight_layout()
     plt.show()
-
-
-   
     
     dct = answers["4B: cluster successes"] = [""]
 
@@ -139,7 +136,26 @@ def compute():
     """
 
     # dct is the function described above in 4.C
-   
+    fig, axs = plt.subplots(len(datasets_dict), 1, figsize=(10, 20))
+
+    # Loop over datasets and apply the modified function
+    for i, (dataset_name, dataset) in enumerate(datasets_dict.items()):
+        # Unpack the dataset
+        data, true_labels = dataset() if callable(dataset) else dataset
+
+        # Apply the modified hierarchical clustering function
+        labels, cutoff_distance = fit_modified(data)
+
+        # Plotting the results
+        ax = axs[i] if len(datasets_dict) > 1 else axs
+        ax.scatter(data[:, 0], data[:, 1], c=labels, cmap='viridis', alpha=0.5)
+        ax.set_title(f'{dataset_name} - Cutoff: {cutoff_distance:.2f}')
+        ax.set_xticks([])
+        ax.set_yticks([])
+
+    # Adjust the layout and show the plot
+    plt.tight_layout()
+    plt.show()
 
     # dct is the function described above in 4.C
     dct = answers["4C: modified function"] = fit_modified
