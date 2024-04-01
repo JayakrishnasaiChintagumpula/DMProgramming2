@@ -130,10 +130,6 @@ def compute():
 
         return cluster_successes, cluster_failures
 
-    
-
-    cluster_successes, cluster_failures = create_cluster_plots(answers["1A: datasets"], answers["1B: fit_kmeans"])
-
     dct= answers["1C: cluster successes"] = {'bvv': [2, 3, 5, 10], 'add': [2, 3, 5, 10], 'b': [2, 3, 5, 10]}
     dct = answers["1C: cluster failures"] = {'nc': [2, 3, 5, 10], 'nm': [2, 3, 5, 10]}
 
