@@ -125,7 +125,7 @@ def compute():
                         cluster_successes.setdefault(dataset_abbr, []).append(k)
 
         plt.tight_layout()
-        plt.savefig('cluster_plots.pdf')  # Ensure the path is accessible for saving the plot
+        plt.savefig('cluster_plots.pdf')  
         plt.close()
 
         return cluster_successes, cluster_failures
@@ -136,6 +136,9 @@ def compute():
 
     dct= answers["1C: cluster successes"] = cluster_successes
     dct = answers["1C: cluster failures"] = cluster_failures
+    
+    print(cluster_successes)
+    print(cluster_failures)
 
     """
     D. Repeat 1.C a few times and comment on which (if any) datasets seem to be sensitive to the choice of initialization for the k=2,3 cases. You do not need to add the additional plots to your report.
