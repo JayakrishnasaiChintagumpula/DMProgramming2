@@ -54,12 +54,37 @@ def compute():
 
     # Dictionary of 5 datasets. e.g., dct["nc"] = [data, labels]
     # keys: 'nc', 'nm', 'bvv', 'add', 'b' (abbreviated datasets)
+    random_state = 42
+
     # Load the datasets
-    
-    dct = answers["4A: datasets"] = {}
+    noisy_circles = datasets.make_circles(n_samples=100, factor=.5, noise=.05, random_state=random_state)
+    noisy_moons = datasets.make_moons(n_samples=100, noise=.05, random_state=random_state)
+    blobs_varied = datasets.make_blobs(n_samples=100, cluster_std=[1.0, 2.5, 0.5], random_state=random_state)
+
+    aniso_data, aniso_labels = datasets.make_blobs(n_samples=100, random_state=random_state)
+    transformation = [[0.6, -0.6], [-0.4, 0.8]]
+    aniso = (np.dot(aniso_data, transformation), aniso_labels)
+
+    blobs = datasets.make_blobs(n_samples=100, random_state=random_state)
+
+    # Perform hierarchical clustering on the datasets with different linkage criteria
+    datasets_list = [noisy_circles, noisy_moons, blobs_varied, aniso, blobs]
+    linkage_types = ['ward', 'complete', 'average', 'single']
+    datasets_labels = {}
+
+    # Hierarchical clustering
+    for i, dataset in enumerate(datasets_list):
+        dataset_labels = {}
+        for linkage in linkage_types:
+            labels = fit_hierarchical_cluster(dataset[0], 2, linkage)
+            dataset_labels[linkage] = labels
+        datasets_labels[i] = dataset_labels
+    dct = answers["4A: datasets"] = {'nc': noisy_circles,'nm': noisy_moons,'bvv': blobs_varied,'add': aniso,'b': blobs}
 
     # dct value:  the `fit_hierarchical_cluster` function
     dct = answers["4A: fit_hierarchical_cluster"] = fit_hierarchical_cluster
+
+    # dct value:  the `fit_hierarchical_cluster` function
 
     """
     B.	Apply your function from 4.A and make a plot similar to 1.C with the four linkage types (single, complete, ward, centroid: rows in the figure), and use 2 clusters for all runs. Compare the results to problem 1, specifically, are there any datasets that are now correctly clustered that k-means could not handle?
