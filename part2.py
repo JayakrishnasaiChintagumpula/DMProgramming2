@@ -26,7 +26,7 @@ import pickle
 import utils as u
 
 # ----------------------------------------------------------------------
- """
+"""
 Part 2
 Comparison of Clustering Evaluation Metrics: 
 In this task you will explore different methods to find a good value for k
