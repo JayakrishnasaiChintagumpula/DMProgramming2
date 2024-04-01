@@ -94,44 +94,42 @@ def compute():
     # which are abbreviated dataset names as strings)
     def create_cluster_plots(datasets, fit_kmeans):
         k_values = [2, 3, 5, 10]
-        fig, axs = plt.subplots(len(k_values), len(datasets), figsize=(20, 15))
-
-        # Initialize cluster successes and failures dictionaries
+        fig, axs = plt.subplots(len(k_values), len(datasets), figsize=(20, 15), squeeze=False)
+        
         cluster_successes = {}
         cluster_failures = {}
 
         for k_index, k in enumerate(k_values):
             for dataset_index, (dataset_abbr, (data, _)) in enumerate(datasets.items()):
                 predicted_labels = fit_kmeans(data, k)
-
                 ax = axs[k_index, dataset_index]
                 ax.scatter(data[:, 0], data[:, 1], c=predicted_labels, cmap='viridis', alpha=0.5)
                 ax.set_title(f'{dataset_abbr}, k={k}')
                 ax.set_xticks([])
                 ax.set_yticks([])
 
-                # Assess failures based on the dataset type and clustering characteristics
-                if dataset_abbr in ['nc', 'nm']:
-                    # Expect k-means to fail for non-isotropic clusters like 'nc' and 'nm'
+                # Analyze the clustering results
+                unique_labels, counts = np.unique(predicted_labels, return_counts=True)
+                if len(unique_labels) < k or np.max(counts) / np.min(counts) > 3:  # Criteria for failure
                     cluster_failures.setdefault(dataset_abbr, []).append(k)
                 else:
-                    # For 'bvv', 'add', and 'b', consider the performance nuanced; failure is less predictable
-                    # These might not always fail, depending on the value of k and the distribution of points
-                    if len(set(predicted_labels)) < k:
-                        # If the number of identified clusters is less than k, mark as a failure
-                        cluster_failures.setdefault(dataset_abbr, []).append(k)
-                    else:
-                        # Otherwise, it could be considered a success, but with caution
-                        cluster_successes.setdefault(dataset_abbr, []).append(k)
+                    cluster_successes.setdefault(dataset_abbr, []).append(k)
 
         plt.tight_layout()
-        plt.savefig('cluster_plots.pdf')  
+        plt.savefig('cluster_plots.pdf')
         plt.close()
 
         return cluster_successes, cluster_failures
 
-    dct= answers["1C: cluster successes"] = {'bvv': [2, 3, 5, 10], 'add': [2, 3, 5, 10], 'b': [2, 3, 5, 10]}
-    dct = answers["1C: cluster failures"] = {'nc': [2, 3, 5, 10], 'nm': [2, 3, 5, 10]}
+    
+
+    cluster_successes, cluster_failures = create_cluster_plots(answers["1A: datasets"], answers["1B: fit_kmeans"])
+
+    dct= answers["1C: cluster successes"] = cluster_successes
+    dct = answers["1C: cluster failures"] = cluster_failures
+    
+    print(cluster_successes)
+    print(cluster_failures)
 
     """
     D. Repeat 1.C a few times and comment on which (if any) datasets seem to be sensitive to the choice of initialization for the k=2,3 cases. You do not need to add the additional plots to your report.
