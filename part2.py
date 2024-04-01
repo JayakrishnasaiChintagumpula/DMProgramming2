@@ -36,13 +36,32 @@ In this task you will explore different methods to find a good value for k
 # Change the arguments and return according to 
 # the question asked. 
 
-def fit_kmeans(data, n_clusters):
-    kmeans = KMeans(n_clusters=n_clusters, random_state=12)
-    kmeans.fit(data)
-    centroids = kmeans.cluster_centers_
-    labels = kmeans.labels_
-    SSE = np.sum((data - centroids[labels]) ** 2)
-    return SSE
+inertial_modelsse = {}
+manual_modelsse = {}
+
+def fit_kmeans(data, k):
+    inertia_sse = []
+    manual_sse = []
+    for no_of_clusters in range(1, k + 1):
+        k_means = KMeans(n_clusters=no_of_clusters)
+        predictions = k_means.fit_predict(data)
+        sse = {}
+        for idx, pred in enumerate(predictions):
+            diff_squared = (data[idx][0] - k_means.cluster_centers_[pred][0]) ** 2 + (data[idx][1] - k_means.cluster_centers_[pred][1]) ** 2
+            try:
+                sse[pred] += diff_squared
+            except KeyError:
+                sse[pred] = diff_squared
+
+        inertia_sse.append(k_means.inertia_)
+        manual_sse_value = 0
+        for i in sse:
+            manual_sse_value += sse[i]
+        manual_sse.append(manual_sse_value)
+        inertial_modelsse[no_of_clusters] = k_means.inertia_
+        manual_modelsse[no_of_clusters] = manual_sse_value
+
+    return inertia_sse, manual_sse
 
 
 def compute():
@@ -52,9 +71,10 @@ def compute():
     """
     A. Call the make_blobs function with following parameters: (center_box=(-20,20), n_samples=20, centers=5, random_state=12).
     """
-    X, y_true = make_blobs(center_box=(-20, 20), n_samples=20, centers=5, random_state=12)
-    centers = np.array([X[y_true == i].mean(axis=0) for i in range(5)])
-    dct = answers["2A: blob"] = [X, y_true, centers]
+    x,label= datasets.make_blobs(n_samples=20, centers=5, center_box=(-20, 20), random_state=12)
+    array_1 = x[:,0:2]
+    array_2 = x[:,1:]
+    dct = answers["2A: blob"] = [array_1, array_2, label]
 
     """
     B. Modify the fit_kmeans function to return the SSE (see Equations 8.1 and 8.2 in the book).
@@ -65,37 +85,27 @@ def compute():
     """
     C. Plot the SSE as a function of k for k=1,2,….,8, and choose the optimal k based on the elbow method.
     """
+    sse_val = fit_kmeans(array_1, 8)[1]
     sse_values = []
-    for k in range(1, 9):
-        sse = fit_kmeans(X, k)
-        sse_values.append((k, sse))
+    for x,y in zip(range(1,9), sse_val):
+        sse_values.append([x,y])
+    plt.plot(np.array(sse_values)[:,1])
+    plt.figure(figsize=(10, 6))
+    plt.plot(range(1, 9), sse_values, marker='o', linestyle='-', color='blue', label='Inertia')
     
-    answers["2C: SSE plot"] = sse_values
-    plt.plot([k[0] for k in sse_values], [k[1] for k in sse_values], 'bx-')
-    plt.xlabel('k')
-    plt.ylabel('SSE')
-    plt.title('The Elbow Method showing the optimal k')
-    plt.grid(True)
-    plt.show()
-
+    print(sse_values)
     dct = answers["2C: SSE plot"] = sse_values
 
     """
     D. Repeat part 2.C for inertia (note this is an attribute in the kmeans estimator called _inertia). Do the optimal k’s agree?
     """
+    inertia_val = fit_kmeans(array_1, 8)[0]
     inertia_values = []
-    for k in range(1, 9):
-        kmeans = KMeans(n_clusters=k, random_state=12)
-        kmeans.fit(X)
-        inertia_values.append((k, kmeans.inertia_))
+    for x,y in zip(range(1,9), inertia_val):
+        inertia_values.append([x,y])
     
-    answers["2D: inertia plot"] = inertia_values
-    # Comparing SSE and inertia to see if the optimal k values agree.
-    optimal_sse_k = min(sse_values, key=lambda t: t[1])[0]
-    optimal_inertia_k = min(inertia_values, key=lambda t: t[1])[0]
-    
-    dct = answers["2C: SSE plot"] = inertia_values
-    
+    dct = answers["2D: inertia plot"] = sse_values
+    # dct value should be a string, e.g., "yes" or "no"
     dct = answers["2D: do ks agree?"] = "yes"
 
     return answers
