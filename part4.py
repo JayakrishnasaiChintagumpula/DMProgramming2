@@ -93,7 +93,43 @@ def compute():
     """
 
     # dct value: list of dataset abbreviations (see 1.C)
-             
+    datasets_dict = {
+    'noisy_circles': datasets.make_circles(n_samples=100, factor=.5, noise=.05, random_state=random_state),
+    'noisy_moons': datasets.make_moons(n_samples=100, noise=.05, random_state=random_state),
+    'blobs': datasets.make_blobs(n_samples=100, random_state=random_state),
+    # Applying a transformation to create an anisotropic dataset
+    'aniso': lambda: ((np.dot(datasets.make_blobs(n_samples=100, centers=3, random_state=42)[0], [[0.6, -0.6], [-0.4, 0.8]]), datasets.make_blobs(n_samples=100, centers=3, random_state=random_state)[1])),
+    'varied': lambda: datasets.make_blobs(n_samples=100, cluster_std=[1.0, 2.5, 0.5], random_state=random_state),
+    }
+    linkage_methods = ['ward', 'complete', 'average', 'single']
+
+    fig, axs = plt.subplots(len(linkage_methods), len(datasets_dict), figsize=(20, 15))
+    for i, linkage in enumerate(linkage_methods):
+        for j, (dataset_name, dataset) in enumerate(datasets_dict.items()):
+            # Some datasets are defined by functions to apply transformations
+            if callable(dataset):
+                data, labels = dataset()
+            else:
+                data, labels = dataset
+
+            scaler = StandardScaler()
+            data_scaled = scaler.fit_transform(data)
+
+            cluster = AgglomerativeClustering(n_clusters=2, linkage=linkage)
+            cluster.fit(data_scaled)
+
+            ax = axs[i][j]
+            ax.scatter(data_scaled[:, 0], data_scaled[:, 1], c=cluster.labels_, cmap='viridis', s=50, alpha=0.6)
+            ax.set_title(f'{dataset_name} - {linkage}')
+            ax.set_xticks([])
+            ax.set_yticks([])
+
+    plt.tight_layout()
+    plt.show()
+
+
+   
+    
     dct = answers["4B: cluster successes"] = [""]
 
     """
