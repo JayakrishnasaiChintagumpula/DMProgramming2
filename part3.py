@@ -54,17 +54,34 @@ def compute():
     """
 
     # return value of scipy.io.loadmat()
-    answers["3A: toy data"] = {}
+    mat_data = io.loadmat('hierarchical_toy_data.mat')
+    answers["3A: toy data"] = mat_data
 
     """
     B.	Create a linkage matrix Z, and plot a dendrogram using the scipy.hierarchy.linkage and scipy.hierachy.dendrogram functions, with “single” linkage.
     """
 
     # Answer: NDArray
-    answers["3B: linkage"] = np.zeros(1)
+    Z = linkage(data_points, 'single')
+
+    # Generate the dendrogram and capture its return value, which contains the structure of the dendrogram.
+    plt.figure(figsize=(10, 7))
+    dendrogram_return_value = dendrogram(Z)
+    plt.close()  # Close the plot to not display it again here, as we're focusing on the structure.
+
+    # Now, dendrogram_return_value contains the necessary information. Let's explicitly check for the keys.
+    required_keys = {'icoord', 'dcoord', 'color_list', 'leaves', 'ivl'}
+    present_keys = set(dendrogram_return_value.keys())
+
+    # Verify that all required keys are present
+    missing_keys = required_keys - present_keys
+
+    # Output the present keys and any missing keys
+    present_keys
+    answers["3B: linkage"] = Z
 
     # Answer: the return value of the dendogram function, dicitonary
-    answers["3B: dendogram"] = {}
+    answers["3B: dendogram"] = present_keys
 
     """
     C.	Consider the merger of the cluster corresponding to points with index sets {I={8,2,13}} J={1,9}}. At what iteration (starting from 0) were these clusters merged? That is, what row does the merger of A correspond to in the linkage matrix Z? The rows count from 0. 
