@@ -90,8 +90,8 @@ def compute():
     for x,y in zip(range(1,9), sse_val):
         sse_values.append([x,y])
     plt.plot(np.array(sse_values)[:,1])
-    plt.figure(figsize=(10, 6))
-    plt.plot(range(1, 9), sse_values, marker='o', linestyle='-', color='blue', label='Inertia')
+    plt.grid(True)
+    plt.show()
     
     print(sse_values)
     dct = answers["2C: SSE plot"] = sse_values
