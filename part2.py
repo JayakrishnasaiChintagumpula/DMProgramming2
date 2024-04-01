@@ -21,7 +21,7 @@ from scipy.cluster.hierarchy import dendrogram, linkage  #
 
 # import plotly.figure_factory as ff
 import math
-from sklearn.cluster import AgglomerativeClustering
+from sklearn.cluster import AgglomerativeClustering,KMeans
 import pickle
 import utils as u
 
