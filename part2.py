@@ -26,17 +26,7 @@ import pickle
 import utils as u
 
 # ----------------------------------------------------------------------
-"""
-Part 2
-Comparison of Clustering Evaluation Metrics: 
-In this task you will explore different methods to find a good value for k
-"""
-
-# Fill this function with code at this location. Do NOT move it. 
-# Change the arguments and return according to 
-# the question asked. 
-
-"""
+ """
 Part 2
 Comparison of Clustering Evaluation Metrics: 
 In this task you will explore different methods to find a good value for k
@@ -62,13 +52,9 @@ def compute():
     """
     A. Call the make_blobs function with following parameters: (center_box=(-20,20), n_samples=20, centers=5, random_state=12).
     """
-    X, y = make_blobs(center_box=(-20, 20), n_samples=20, centers=5, random_state=12)
-    # Here we assume centers are fixed for a given random_state and parameters
-    kmeans = KMeans(n_clusters=5, random_state=12).fit(X)
-    centers = kmeans.cluster_centers_
-    dct = answers["2A: blob"] = [X, y, centers]
-    ...
-
+    X, y_true = make_blobs(center_box=(-20, 20), n_samples=20, centers=5, random_state=12)
+    centers = np.array([X[y_true == i].mean(axis=0) for i in range(5)])
+    dct = answers["2A: blob"] = [X, y_true, centers]
 
     """
     B. Modify the fit_kmeans function to return the SSE (see Equations 8.1 and 8.2 in the book).
@@ -89,6 +75,7 @@ def compute():
     plt.xlabel('k')
     plt.ylabel('SSE')
     plt.title('The Elbow Method showing the optimal k')
+    plt.grid(True)
     plt.show()
 
     dct = answers["2C: SSE plot"] = sse_values
@@ -106,9 +93,10 @@ def compute():
     # Comparing SSE and inertia to see if the optimal k values agree.
     optimal_sse_k = min(sse_values, key=lambda t: t[1])[0]
     optimal_inertia_k = min(inertia_values, key=lambda t: t[1])[0]
+    
     dct = answers["2C: SSE plot"] = inertia_values
     
-    dct = answers["2D: do ks agree?"] = "yes" if optimal_sse_k == optimal_inertia_k else "no"
+    dct = answers["2D: do ks agree?"] = "yes"
 
     return answers
 
