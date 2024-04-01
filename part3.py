@@ -69,10 +69,8 @@ def compute():
     Z = linkage(data_points, 'single')
     
     plt.figure(figsize=(25, 10))
-    dendo=dendrogram(
-        Z,
-        leaf_rotation=90.,  # rotates the x axis labels
-        leaf_font_size=8.,)  # font size for the x axis labels
+    dendo=dendrogram(Z)
+    plt.show()
 
     # Answer: the return value of the dendogram function, dicitonary
     answers["3B: linkage"] = Z
