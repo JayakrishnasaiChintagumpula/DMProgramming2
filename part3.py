@@ -27,8 +27,23 @@ Recall from lecture that agglomerative hierarchical clustering is a greedy itera
 # the question asked.
 
 
-def data_index_function():
-    return None
+def data_index_function(I, J, distance_matrix, Z, dissimilarities):
+    # Check if we have already calculated the dissimilarity
+    key = frozenset(I), frozenset(J)
+    if key in dissimilarities:
+        return dissimilarities[key]
+    
+    # Calculate dissimilarity if not already done
+    # Extract the distances between points in cluster I and cluster J
+    cluster_I_distances = distance_matrix[np.ix_(I, J)]
+    
+    # The single linkage dissimilarity is the minimum of these distances
+    single_link_dissimilarity = np.min(cluster_I_distances)
+    
+    # Cache this dissimilarity
+    dissimilarities[key] = single_link_dissimilarity
+    
+    return single_link_dissimilarity
 
 
 def compute():
