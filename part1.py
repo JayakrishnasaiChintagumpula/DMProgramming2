@@ -118,6 +118,8 @@ def compute():
         plt.tight_layout()
         plt.savefig('cluster_plots.pdf')
         plt.close()
+        
+        return cluster_successes, cluster_failures
 
     cluster_successes, cluster_failures = create_cluster_plots(answers["1A: datasets"], answers["1B: fit_kmeans"])
 
