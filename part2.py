@@ -87,14 +87,18 @@ def compute():
     """
     sse_val = fit_kmeans(list1, 8)[1]
     sse_values = []
-    for x,y in zip(range(1,9), sse_val):
-        sse_values.append([x,y])
-    plt.plot(np.array(sse_values)[:,1])
-    plt.savefig("2C_plot.pdf")
+    for x, y in zip(range(1, 9), sse_val):
+        sse_values.append([x, y])
+
+    # Convert sse_values to a NumPy array for easier slicing.
+    sse_values_array = np.array(sse_values)
+
+    # Plotting the SSE values.
+    plt.plot(sse_values_array[:, 0], sse_values_array[:, 1], '-o', markerfacecolor='white', markeredgecolor='black', markeredgewidth=2)  # '-o' adds line and circle markers.
+    plt.xlabel('k (No of clusters)')
+    plt.ylabel('SSE (Sum of Squared Error)')
     plt.grid(True)
     plt.show()
-    
-    print(sse_values)
     dct = answers["2C: SSE plot"] = sse_values
 
     """
