@@ -72,9 +72,9 @@ def compute():
     A. Call the make_blobs function with following parameters: (center_box=(-20,20), n_samples=20, centers=5, random_state=12).
     """
     x,label= datasets.make_blobs(n_samples=20, centers=5, center_box=(-20, 20), random_state=12)
-    array_1 = x[:,0:2]
-    array_2 = x[:,1:]
-    dct = answers["2A: blob"] = [array_1, array_2, label]
+    list1 = x[:,0:2]
+    list2 = x[:,1:]
+    dct = answers["2A: blob"] = [list1, list2, label]
 
     """
     B. Modify the fit_kmeans function to return the SSE (see Equations 8.1 and 8.2 in the book).
@@ -85,7 +85,7 @@ def compute():
     """
     C. Plot the SSE as a function of k for k=1,2,….,8, and choose the optimal k based on the elbow method.
     """
-    sse_val = fit_kmeans(array_1, 8)[1]
+    sse_val = fit_kmeans(list1, 8)[1]
     sse_values = []
     for x,y in zip(range(1,9), sse_val):
         sse_values.append([x,y])
@@ -99,7 +99,7 @@ def compute():
     """
     D. Repeat part 2.C for inertia (note this is an attribute in the kmeans estimator called _inertia). Do the optimal k’s agree?
     """
-    inertia_val = fit_kmeans(array_1, 8)[0]
+    inertia_val = fit_kmeans(list1, 8)[0]
     inertia_values = []
     for x,y in zip(range(1,9), inertia_val):
         inertia_values.append([x,y])
