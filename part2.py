@@ -90,6 +90,7 @@ def compute():
     for x,y in zip(range(1,9), sse_val):
         sse_values.append([x,y])
     plt.plot(np.array(sse_values)[:,1])
+    plt.savefig("2C_plot.pdf")
     plt.grid(True)
     plt.show()
     
