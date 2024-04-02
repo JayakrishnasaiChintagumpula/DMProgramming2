@@ -125,7 +125,7 @@ def compute():
             ax.set_yticks([])
 
     plt.tight_layout()
-    plt.savefig('4b.pdf')
+    plt.savefig('4b_plot.pdf')
     plt.show()
     
     dct = answers["4B: cluster successes"] = ["nm and nc are cluster successes"]
@@ -156,7 +156,7 @@ def compute():
 
     # Adjust the layout and show the plot
     plt.tight_layout()
-    plt.savefig('4c.pdf')
+    plt.savefig('4c_plot.pdf')
     plt.show()
 
     # dct is the function described above in 4.C
