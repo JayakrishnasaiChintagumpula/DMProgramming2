@@ -71,6 +71,7 @@ def compute():
     plt.figure(figsize=(25, 10))
     dendo=dendrogram(Z)
     plt.savefig("3B_dendrogram.pdf")
+    plt.title('Dendrogram using the given functions and with single linkage method') 
     plt.show()
 
     # Answer: the return value of the dendogram function, dicitonary
