@@ -70,6 +70,7 @@ def compute():
     
     plt.figure(figsize=(25, 10))
     dendo=dendrogram(Z)
+    plt.savefig("3B_dendrogram.pdf")
     plt.show()
 
     # Answer: the return value of the dendogram function, dicitonary
