@@ -116,7 +116,7 @@ def compute():
                 ax.set_yticks([])
 
         plt.tight_layout()
-        plt.savefig('cluster_plots.pdf')
+        plt.savefig('1C_plot.pdf')
         plt.close()
         
         return cluster_successes, cluster_failures
