@@ -119,9 +119,6 @@ def compute():
         plt.savefig('cluster_plots.pdf')
         plt.close()
 
-    # Return the initialized and possibly populated dictionaries
-        return cluster_successes, cluster_failures
-
     cluster_successes, cluster_failures = create_cluster_plots(answers["1A: datasets"], answers["1B: fit_kmeans"])
 
     dct= answers["1C: cluster successes"] = {'bvv': [2, 3, 5, 10], 'add': [2, 3, 5, 10], 'b': [2, 3, 5, 10]}
